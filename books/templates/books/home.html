@@ -1,0 +1,36 @@
+<a href="{% url 'feedbacks_page' %}">Feedbacks</a> | <a href="{% url 'contact_page' %}">Contact Us</a><br><br>
+<h1>Home</h1>
+<form method="GET">
+    <input type="text" name="query" placeholder="Search Books" {% if query %}value="{{ query }}"{% endif %}>
+    <button type="submit">Search</button>
+</form>
+
+{% if query %}
+    <h2>Search Results for "{{ query }}"</h2>
+    <ul>
+    {% for book in books %}
+        <li><a href="{% url 'book_page' author_id=book.author.id book_title=book.title %}">{{ book.title }}</a></li>
+    {% empty %}
+        <li>No books found.</li>
+    {% endfor %}
+    </ul>
+    <a href="{% url 'home_page' %}">Return</a>
+{% else %}
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.first_name }}!</p>
+        <h2>Authors' List</h2>
+        <ul>
+            {% for author in authors %}
+                <li><a href="{% url 'author_page' author_id=author.id %}">{{ author.name }} {{ author.surname }}</a></li>
+            {% endfor %}
+        </ul>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <p>Log in to see more information! | <a href="{% url 'login' %}">Log In</a></p>
+    {% endif %}
+{% endif %}
+
+

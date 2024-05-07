@@ -1,0 +1,28 @@
+<a href="{% url 'home_page' %}">Home</a> | <a href="{% url 'feedbacks_page' %}">Feedbacks</a> | <a href="{% url 'contact_page' %}">Contact Us</a><br><br>
+<h2 style="margin: 0;">Reservation for </h2>
+<h2 style="margin: 0;">{{ book.author }} - {{ book.title }}</h2>
+
+<p>{{ book.description }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% if book.is_available %}
+        {% if user.is_authenticated  %}
+            <input type="hidden" name="book_title" value="{{ book.title }}">
+            <input type="submit" value="Confirm Booking">
+        {% else %}
+            <p><strong>Log In to make a booking | </strong><a href="{% url 'login' %}">Log In</a></p>
+        {% endif %}
+    {% else %}
+        {% if reservation.client.user.username == request.user.username %}
+            <input type="hidden" name="cancel" value="1">
+            <input type="submit" value="Cancel Booking">
+        {% else %}
+            <p><strong>This book is already reserved</strong></p>
+        {% endif %}
+    {% endif %}
+</form>
+
+<a href="{% url 'author_page' author_id=author_id %}">Back to Author's Page</a>
+
+

@@ -1,0 +1,15 @@
+<a href="{% url 'home_page' %}">Home</a> | <a href="{% url 'feedbacks_page' %}">Feedbacks</a> | <a href="{% url 'contact_page' %}">Contact Us</a><br><br>
+<h2>{{ author.name }} {{ author.surname }}</h2>
+
+<h3>Available Books</h3>
+<ul>
+    {% for book in books %}
+        <li>
+            {% if book.is_available %}
+                <a href="{% url 'book_page' author_id=author.id book_title=book.title %}">{{ book.title }}</a>
+            {% else %}
+                <a href="{% url 'book_page' author_id=author.id book_title=book.title %}">{{ book.title }}</a> - <strong>Booked</strong>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
