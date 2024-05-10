@@ -1,36 +1,52 @@
-<a href="{% url 'feedbacks_page' %}">Feedbacks</a> | <a href="{% url 'contact_page' %}">Contact Us</a><br><br>
-<h1>Home</h1>
-<form method="GET">
-    <input type="text" name="query" placeholder="Search Books" {% if query %}value="{{ query }}"{% endif %}>
-    <button type="submit">Search</button>
+{% extends 'master.html' %}
+
+{% block content %}
+{% if messages %}
+        <div>
+            {% for message in messages %}
+                <h3 style="margin-top: 10px;">{{ message }}</h3>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+<h1 class="mt-3">Home</h1>
+<form method="GET" class="mt-3">
+    <div class="input-group mb-3">
+        <input type="text" name="query" class="form-control" placeholder="Search Books" {% if query %}value="{{ query }}"{% endif %}>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
 </form>
 
 {% if query %}
     <h2>Search Results for "{{ query }}"</h2>
-    <ul>
+    <ul class="list-group">
     {% for book in books %}
-        <li><a href="{% url 'book_page' author_id=book.author.id book_title=book.title %}">{{ book.title }}</a></li>
+        <li class="list-group-item"><a href="{% url 'book_page' author_id=book.author.id book_title=book.title %}">{{ book.title }}</a></li>
     {% empty %}
-        <li>No books found.</li>
+        <li class="list-group-item">No books found.</li>
     {% endfor %}
     </ul>
-    <a href="{% url 'home_page' %}">Return</a>
+    <a href="{% url 'home_page' %}" class="btn btn-secondary mt-3">Return</a>
 {% else %}
     {% if user.is_authenticated %}
-        <p>Welcome, {{ user.first_name }}!</p>
         <h2>Authors' List</h2>
-        <ul>
+        <ul class="list-group">
             {% for author in authors %}
-                <li><a href="{% url 'author_page' author_id=author.id %}">{{ author.name }} {{ author.surname }}</a></li>
+                <li class="list-group-item"><a href="{% url 'author_page' author_id=author.id %}">{{ author.name }} {{ author.surname }}</a></li>
             {% endfor %}
         </ul>
-        <form action="{% url 'logout' %}" method="post">
+        <form action="{% url 'logout' %}" method="post" class="mt-3">
             {% csrf_token %}
-            <button type="submit">Logout</button>
+            <button type="submit" class="btn btn-danger">Logout</button>
         </form>
     {% else %}
-        <p>Log in to see more information! | <a href="{% url 'login' %}">Log In</a></p>
+        <h2 class="mt-3">Authors' List</h2>
+        <ul class="list-group">
+            {% for author in authors %}
+                <li class="list-group-item"><a href="{% url 'author_page' author_id=author.id %}">{{ author.name }} {{ author.surname }}</a></li>
+            {% endfor %}
+        </ul>
+        <p class="mt-3">Log in to see more information! | <a href="{% url 'login' %}" class="btn btn-primary">Log In</a></p>
     {% endif %}
 {% endif %}
-
-
+{% endblock %}

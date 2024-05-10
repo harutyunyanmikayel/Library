@@ -1,23 +1,48 @@
-<a href="{% url 'home_page' %}">Home</a>
-<h2>Register</h2>
-{% if error_message %}
-    <p>{{ error_message }}</p>
-{% endif %}
-<form method="post">
-    {% csrf_token %}
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" required><br>
-    <label for="surname">Surname:</label><br>
-    <input type="text" id="surname" name="surname" required><br>
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" required><br>
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br>
-    <label for="address">Address:</label><br>
-    <input type="text" id="address" name="address" required><br>
-    <label for="password1">Password:</label><br>
-    <input type="password" id="password1" name="password1" required><br>
-    <label for="password2">Confirm Password:</label><br>
-    <input type="password" id="password2" name="password2" required><br><br>
-    <input type="submit" value="Register">
-</form>
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Register</h2>
+
+    {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    <form method="post" class="row g-3">
+        {% csrf_token %}
+        <div class="col-md-4 mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="surname" class="form-label">Surname:</label>
+            <input type="text" class="form-control" id="surname" name="surname" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="col-md-8 mb-3">
+            <label for="address" class="form-label">Address:</label>
+            <input type="text" class="form-control" id="address" name="address" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="password1" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="password1" name="password1" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="password2" class="form-label">Confirm Password:</label>
+            <input type="password" class="form-control" id="password2" name="password2" required>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

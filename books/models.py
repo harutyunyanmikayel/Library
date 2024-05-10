@@ -31,17 +31,17 @@ class Book(models.Model):
 
 class BookReview(models.Model):
     REVIEW_CHOICES = [
-        ('EXCELLENT', 'Excellent'),
-        ('GOOD', 'Good'),
-        ('NORMAL', 'Normal'),
-        ('BAD', 'Bad'),
-        ('TERRIBLE', 'Terrible'),
+        ('Great', 'Great'),
+        ('Good', 'Good'),
+        ('Decent', 'Decent'),
+        ('Bad', 'Bad'),
+        ('Terrible', 'Terrible'),
     ]
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     review = models.CharField(max_length=500)
-    rating = models.CharField(max_length=10, choices=REVIEW_CHOICES)
+    rating = models.CharField(max_length=15, choices=REVIEW_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

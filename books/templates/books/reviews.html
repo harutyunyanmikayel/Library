@@ -1,0 +1,81 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Reviews for {{ book.title }}</h1>
+
+    {% if messages %}
+        <div class="alert alert-info" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if reviews %}
+        <div class="row row-cols-1 row-cols-md-2">
+            {% for review in reviews %}
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">{{ review.client.user.first_name }} {{ review.client.user.last_name }}</h5>
+                            <p class="card-text mb-1"><strong>Quality:</strong> {{ review.rating }}</p>
+                            <p class="card-text">{{ review.review }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No reviews available for this book.</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        {% if not has_reviewed %}
+            <button class="btn btn-primary" onclick="openReviewForm()" style="margin-right: 5px;">Leave a Review</button>
+        {% else %}
+            <form method="post" style="display: inline-flex;">
+                {% csrf_token %}
+                <input type="hidden" name="delete_review">
+                <button type="submit" class="btn btn-danger mb-3" style="margin-right: 5px;">Delete the Review</button>
+            </form>
+        {% endif %}
+    {% else %}
+        <p><strong>Log In to leave a review | </strong><a href="{% url 'login' %}" class="btn btn-secondary">Log In</a></p>
+    {% endif %}
+
+    <a href="{% url 'book_page' author_id=book.author.id book_title=book.title %}" class="btn btn-secondary" style="vertical-align: top;">Back To Booking Page</a>
+
+    <div id="reviewForm" style="display: none; margin-top: 10px;">
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            <input type="hidden" name="submit_review">
+            <div class="mb-3">
+                <textarea class="form-control" name="review" placeholder="Write your review here" rows="3" style="width: 50%;"></textarea>
+            </div>
+            <div class="mb-3" style="width: 20%;">
+                <select class="form-select" name="rating">
+                    <option value="" selected disabled>Choose rating...</option>
+                    <option value="Great">Great</option>
+                    <option value="Good">Good</option>
+                    <option value="Decent">Decent</option>
+                    <option value="Bad">Bad</option>
+                    <option value="Terrible">Terrible</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openReviewForm() {
+        var reviewForm = document.getElementById("reviewForm");
+        if (reviewForm.style.display === "none") {
+            reviewForm.style.display = "block";
+        } else {
+            reviewForm.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
